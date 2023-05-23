@@ -1,7 +1,7 @@
 {
 	"name": "create-ts-express-server",
 	"version": "0.1.1",
-	"description": "",
+	"description": "CLI tool to scaffold an express app with typescript and path aliases.",
 	"main": "bin/index.js",
 	"bin": {
 		"create-ts-express-server": "./bin/index.js"
@@ -11,8 +11,10 @@
 	},
 	"keywords": [
 		"express",
+		"ts express",
 		"typescript",
-		"boilerplate",
+		"path alias",
+		"scaffold",
 		"create express app"
 	],
 	"author": "SamuelRnn <samuel.rnn31@gmail.com> (https://samuelrnn.vercel.app)",
