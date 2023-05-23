@@ -1,0 +1,13 @@
+{
+	"name": "ts-express-server",
+	"version": "1.0.0",
+	"description": "Express typescript powered server, with paths aliases configuration by default.",
+	"main": "src/main.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "tsnd --respawn --rs --cls -r tsconfig-paths/register src/main.ts",
+		"build": "tsc && tsc-alias",
+		"start": "node dist/src/main.js"
+	},
+	"license": "ISC"
+}

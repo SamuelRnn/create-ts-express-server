@@ -1,0 +1,13 @@
+{
+	"dependencies": ["cors", "dotenv", "express", "morgan"],
+	"devDependencies": [
+		"@types/cors",
+		"@types/express",
+		"@types/morgan",
+		"@types/node",
+		"ts-node-dev",
+		"tsc-alias",
+		"tsconfig-paths",
+		"typescript"
+	]
+}
