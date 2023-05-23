@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
 const { dependencies, devDependencies } = require('./deps.json')
-const { run, getPkgManager, isValidFolderName } = require('./functions')
+const { runSync, runAsync, getPkgManager, isValidFolderName } = require('./functions')
 const { copySync } = require('fs-extra')
 const path = require('path')
 const readline = require('readline')
+const spinners = require('cli-spinners')
+const { readdirSync } = require('fs')
 
 process.on('SIGINT', () => {
-	console.log('process end')
-	process.exit(1)
+	process.exit(0)
 })
 
 const rl = readline.createInterface({
@@ -25,9 +26,10 @@ function input(prompt) {
 }
 
 async function main() {
+	const spinner = spinners.material
 	let projectName = process.argv[2]?.trim()
 
-	run('cls')
+	runSync('cls')
 
 	if (!projectName) {
 		let invalidName = true
@@ -51,12 +53,38 @@ async function main() {
 
 	const sourcePath = path.join(__dirname, '/../ts-template')
 	const destPath = path.join(process.cwd(), targetPath)
+
+	const destDir = readdirSync(destPath)
+
+	if (destDir.length) {
+		console.error(`\nDirectory "${destPath}" is already in use.`)
+		process.exit(0)
+	}
+
 	copySync(sourcePath, destPath)
 
-	console.log(`using "${pkgManager.name}"`)
+	console.log(`\nusing "${pkgManager.name}"`)
 
-	run(`cd ${projectName} && ${installCmd} -D ${devDependencies.join(' ')}`)
-	run(`cd ${projectName} && ${installCmd} ${dependencies.join(' ')}`)
+	//exec concurrently
+	try {
+		let currentFrame = 0
+		const interval = setInterval(() => {
+			process.stdout.write('\r' + 'Installing dependencies ' + spinner.frames[currentFrame])
+			currentFrame = (currentFrame + 1) % spinner.frames.length
+		}, spinner.interval)
+
+		await Promise.all([
+			runAsync(`cd ${projectName} && ${installCmd} -D ${devDependencies.join(' ')}`),
+			runAsync(`cd ${projectName} && ${installCmd} ${dependencies.join(' ')}`),
+		])
+		clearInterval(interval)
+		process.stdout.clearLine()
+
+		console.log(`\nDependencies installed	`)
+	} catch (error) {
+		console.error('install error:\n', error)
+		process.exit(1)
+	}
 
 	const finalStepMsg = {
 		npm: 'npm run dev',

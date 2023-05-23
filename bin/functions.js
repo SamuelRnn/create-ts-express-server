@@ -1,6 +1,6 @@
-const { execSync } = require('child_process')
+const { execSync, exec } = require('child_process')
 
-function run(command) {
+function runSync(command) {
 	try {
 		execSync(`${command}`, {
 			stdio: 'inherit',
@@ -10,6 +10,17 @@ function run(command) {
 		process.exit(1)
 	}
 }
+function runAsync(command) {
+	return new Promise((resolve, reject) => {
+		const childProcess = exec(command, (error, stdout) => {
+			if (error) {
+				reject(error)
+			} else {
+				resolve(stdout)
+			}
+		})
+	})
+}
 function getPkgManager() {
 	const [name, version] = process.env.npm_config_user_agent.split(' ').shift().split('/')
 	return {
@@ -18,31 +29,24 @@ function getPkgManager() {
 	}
 }
 function isValidFolderName(folderName) {
-	// Define invalid characters that cannot be used in a folder name
 	const invalidCharacters = /[\\/:\*\?"<>\|]/
 
-	// Check if the folder name contains any invalid characters
 	if (invalidCharacters.test(folderName)) {
 		return false
 	}
-
 	// Check if the folder name is empty
 	if (folderName.length === 0) {
 		return false
 	}
-
-	// Check if the folder name is "." or ".."
-	if (folderName === '.' || folderName === '..') {
+	// Check if the folder name is ".."
+	if (folderName === '..') {
 		return false
 	}
-
 	// Check if the folder name ends with a period (".")
-	if (folderName.endsWith('.')) {
+	if (folderName.length > 1 && folderName.endsWith('.')) {
 		return false
 	}
-
-	// The folder name is valid
 	return true
 }
 
-module.exports = { run, getPkgManager, isValidFolderName }
+module.exports = { runSync, runAsync, getPkgManager, isValidFolderName }

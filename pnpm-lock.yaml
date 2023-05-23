@@ -1,11 +1,19 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  cli-spinners:
+    specifier: ^2.9.0
+    version: 2.9.0
   fs-extra:
     specifier: ^11.1.1
     version: 11.1.1
 
 packages:
+
+  /cli-spinners@2.9.0:
+    resolution: {integrity: sha512-4/aL9X3Wh0yiMQlE+eeRhWP6vclO3QRtw1JHKIT0FFUs5FjpFmESqtMvYZ0+lbzBw900b95mS0hohy+qn2VK/g==}
+    engines: {node: '>=6'}
+    dev: false
 
   /fs-extra@11.1.1:
     resolution: {integrity: sha512-MGIE4HOvQCeUCzmlHs0vXpih4ysz4wg9qiSAu6cd42lVwPbTM1TjV7RusoyQqMmk/95gdQZX72u+YW+c3eEpFQ==}
