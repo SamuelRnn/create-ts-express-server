@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const { dependencies, devDependencies } = require('./deps.json')
-const { runSync, getPkgManager, isValidFolderName } = require('./functions')
+const { runSync, runAsync, getPkgManager, isValidFolderName } = require('./functions')
 const { copySync } = require('fs-extra')
 const path = require('path')
 const readline = require('readline')
@@ -28,8 +28,6 @@ function input(prompt) {
 async function main() {
 	const spinner = spinners.material
 	let projectName = process.argv[2]?.trim()
-
-	runSync('cls')
 
 	if (!projectName) {
 		let invalidName = true
@@ -71,7 +69,9 @@ async function main() {
 		currentFrame = (currentFrame + 1) % spinner.frames.length
 	}, spinner.interval)
 
-	runSync(`cd ${projectName} && ${installCmd} -D ${devDependencies.join(' ')} && ${installCmd} ${dependencies.join(' ')}`)
+	await runAsync(
+		`cd ${projectName} && ${installCmd} -D ${devDependencies.join(' ')} && ${installCmd} ${dependencies.join(' ')}`
+	)
 
 	clearInterval(interval)
 	process.stdout.clearLine()
@@ -84,6 +84,7 @@ async function main() {
 		yarn: 'yarn dev',
 	}
 	console.log(`\nNow run "${projectName === '.' ? '' : `cd ${projectName} && `}${finalStepMsg[pkgManager.name]}"\n`)
+	process.exit(0)
 }
 
 main()

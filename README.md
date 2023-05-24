@@ -1,27 +1,31 @@
-# ts-express-server
+# create-ts-express-server
 
 ## Usage
 
 ```bash
-$ npx ts-express-server [project-name|.]
+npm create ts-express-server@latest
 
-#using pnpm
-$ pnpm dlx ts-express-server [project-name|.]
+yarn create ts-express-server
 
-#using yarn
-$ pnpm dlx ts-express-server [project-name|.]
+pnpm create ts-express-server
+```
+
+- Optionally pass project directory `valid-dir | .` as:
+
+```bash
+pnpm create ts-express-server <project-directory>
 ```
 
 ## features
 
-- Path Aliases (add your own in tsconfig.json/paths)
+- Path Aliases (default "_@/_" for "_src/_" dir, change it in tsconfig.json/paths)
 - MVC pattern (kind of)
 - Production ready (almost)
 
 ## annotations
 
 - Dev server relies on [ts-node-dev](https://www.npmjs.com/package/ts-node-dev)
-- To remove path alias configuration remove "paths" option on _tsconfig.json_, and replace the scrips in _package.json_ with these:
+- To remove path alias configuration remove "paths" option on _tsconfig.json_, and replace the _scripts_ in _package.json_ with these:
 
 ```json
 {
@@ -30,6 +34,7 @@ $ pnpm dlx ts-express-server [project-name|.]
 		//...
 		"dev": "tsnd --respawn --rs --cls src/main.ts",
 		"build": "tsc"
+		//...
 	}
 	//...
 }

@@ -1,12 +1,21 @@
-const { execSync } = require('child_process')
+const { execSync, exec } = require('child_process')
 
 function runSync(command) {
 	try {
-		execSync(`${command}`)
+		execSync(`${command}`, { stdio: 'ignore' })
 	} catch (error) {
 		console.error(`Error at running "${command}"\n`, error)
 		process.exit(1)
 	}
+}
+function runAsync(command) {
+	return new Promise((resolve, reject) => {
+		exec(command, (err) => {
+			if (err) {
+				reject(err)
+			} else resolve()
+		})
+	})
 }
 function getPkgManager() {
 	const [name, version] = process.env.npm_config_user_agent.split(' ').shift().split('/')
@@ -36,4 +45,4 @@ function isValidFolderName(folderName) {
 	return true
 }
 
-module.exports = { runSync, getPkgManager, isValidFolderName }
+module.exports = { runSync, runAsync, getPkgManager, isValidFolderName }
